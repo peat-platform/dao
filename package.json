@@ -1,0 +1,40 @@
+{
+  "name": "DAO",
+  "description": "OPENi Cloudlet Platform database access module",
+  "version": "0.1.0",
+  "homepage": "",
+  "author": {
+    "name": "dmccarthy",
+    "email": "dmccarthy@tssg.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.openi-ict.eu:dao.git"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/main.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt nodeunit"
+  },
+  "dependencies" :{
+     "nano":""
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt": "~0.4.1"
+  },
+  "keywords": []
+}
