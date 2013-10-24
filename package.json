@@ -27,8 +27,10 @@
   "scripts": {
     "test": "grunt nodeunit"
   },
-  "dependencies" :{
-     "nano":""
+  "dependencies" : {
+     "nano"          : "4.1.4",
+     "m2nodehandler" : "git+ssh://git@gitlab.openi-ict.eu:m2nodehandler.git#master",
+     "dbc"           : "git+ssh://git@gitlab.openi-ict.eu:dbc.git#master"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.4",
