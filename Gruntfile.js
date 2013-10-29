@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       },
       plato: {
          options: {
-            title: 'Mongrel2 Node Handler',
+            title: 'Data Access Object',
             jshint: grunt.file.readJSON('.jshintrc')
          },
          metrics: {
