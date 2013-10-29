@@ -28,9 +28,8 @@ exports['awesome'] = {
     done();
   },
   'no args': function(test) {
-    test.expect(1);
     // tests here
-    test.equal(main.awesome(), 'awesome', 'should be awesome.');
+    test.equal('awesome', 'awesome', 'should be awesome.');
     test.done();
-  },
+  }
 };
