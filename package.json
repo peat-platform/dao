@@ -36,7 +36,19 @@
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt": "~0.4.1"
+    "grunt-contrib-clean": "",
+    "grunt-contrib-concat": "",
+    "grunt-contrib-uglify": "",
+    "grunt-istanbul-coverage": "",
+    "grunt-testem": "",
+    "grunt-qunit-cov": "",
+    "grunt-plato": "",
+    "grunt-node-tap": "",
+    "grunt-istanbul": "",
+    "grunt": "~0.4.1",
+    "grunt-config":"",
+    "tap": "",
+    "sinon": ""
   },
   "keywords": []
 }
