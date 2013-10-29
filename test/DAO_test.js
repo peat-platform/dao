@@ -1,6 +1,7 @@
 'use strict';
 
-var DAO = require('../lib/main.js');
+//var base_path = require('./basePath.js');
+//var DAO = require(base_path + '../lib/main.js');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
