@@ -1,6 +1,9 @@
 'use strict';
 
 var DAO = require('../lib/main.js');
+var nano = require('nano')('http://localhost:5984');
+var net = require('net')
+var zmq = require('m2nodehandler')
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -21,6 +24,15 @@ var DAO = require('../lib/main.js');
     test.doesNotThrow(block, [error], [message])
     test.ifError(value)
 */
+var server = net.createServer()
+
+server.on('connection', function (conn) {
+  conn.on('data', function (data) {
+        console.log(data);
+    });
+})
+server.listen(5555)
+
 
 exports['awesome'] = {
   setUp: function(done) {
@@ -28,9 +40,29 @@ exports['awesome'] = {
     done();
   },
   'no args': function(test) {
-    test.expect(1);
+    //test.expect(1);
     // tests here
-    test.equal(main.awesome(), 'awesome', 'should be awesome.');
+    test.done();
+  },
+};
+
+exports['getAction'] = {
+  setUp: function(done) {
+    this.mongPush = zmq.bindToMong2PubQ({spec:'tcp://127.0.0.1:5555', id:'dao_conn'})
+    this.msg = {
+      uuid   : "0123456789",
+      connId : 0,
+      action : "GET",
+      name   : ["data","000001","test1"],
+      data   : "null"
+   }
+    done();
+  },
+  'no args': function(test) {
+    
+    DAO.initDB()
+    DAO.getAction(this.msg, this.mongPush)
+    console.log(this.mongPush['publish'])
     test.done();
   },
 };
