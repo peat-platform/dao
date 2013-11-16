@@ -34,7 +34,7 @@ grunt jenkins
 To start the component enter:
 
 ```javascript
-node lib/main.js
+node lib/local-runner.js
 ```
 
 ## Documentation
