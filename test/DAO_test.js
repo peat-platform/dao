@@ -1,10 +1,10 @@
 'use strict';
 
 var base_path = require('./basePath.js');
-var DAO = require(base_path + '../lib/helper.js');
-var nano = require('nano')('http://localhost:5984');
-var net = require('net')
-var zmq = require('m2nodehandler')
+var DAO       = require(base_path + '../lib/helper.js');
+var nano      = require('nano')('http://localhost:5984');
+var net       = require('net')
+var zmq       = require('m2nodehandler')
 
 
 /*
