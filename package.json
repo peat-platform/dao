@@ -28,7 +28,7 @@
     "test": "grunt nodeunit"
   },
   "dependencies" : {
-     "nano"          : "4.1.4",
+     "couchbase"     : "",
      "m2nodehandler" : "git+ssh://git@gitlab.openi-ict.eu:m2nodehandler.git#master",
      "dbc"           : "git+ssh://git@gitlab.openi-ict.eu:dbc.git#master",
      "openi-logger"  : "git+ssh://git@gitlab.openi-ict.eu:openi-logger.git#master"

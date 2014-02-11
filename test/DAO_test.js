@@ -26,14 +26,6 @@ var zmq       = require('m2nodehandler')
     test.doesNotThrow(block, [error], [message])
     test.ifError(value)
 */
-var server = net.createServer()
-
-server.on('connection', function (conn) {
-  conn.on('data', function (data) {
-        console.log(data);
-    });
-})
-server.listen(5555)
 
 
 exports['awesome'] = {
