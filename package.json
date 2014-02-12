@@ -28,6 +28,7 @@
     "test": "grunt nodeunit"
   },
   "dependencies" : {
+     "async"         : "",
      "nano"          : "",
      "m2nodehandler" : "git+ssh://git@gitlab.openi-ict.eu:m2nodehandler.git#master",
      "dbc"           : "git+ssh://git@gitlab.openi-ict.eu:dbc.git#master",

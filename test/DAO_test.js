@@ -48,134 +48,34 @@ exports['init'] = {
 
 
 exports['create'] = {
-   setUp: function (callback) {
-      var params = {
-         'action'       : 'CREATE',
-         'cloudlet'     : 'c_3423423423423431',
-         'object_name'  : "test",
-         'object_data'  : {'a':true},
-         'mongrel_resp' : {'value':true, 'other' : 'abc'}
-      }
 
-      dao.evaluateMethod(params, function(){});
-      callback();
-   },
-   tearDown: function (callback) {
-      var params = {
-         'action'       : 'DELETE',
-         'cloudlet'     : 'c_3423423423423431',
-         'object_name'  : "test",
-         'object_data'  : {'a':true},
-         'mongrel_resp' : {'value':true, 'other' : 'abc'}
-      }
-
-      dao.evaluateMethod(params, function(){});
-      callback();
-   },
-   'test malformed object': function(test) {
-
-      test.throws(function(){
-         var params = {
-            'path'      : '/opt/openi/cloudlet_platform/logs/dao',
-            'log_level' : 'debug',
-            'as_json'   : true
-         }
-
-         dao.evaluateMethod(params, function(out){
-         });
-
-      })
-      test.done();
-   },
-   'test create': function(test) {
-
-      var params = {
-         'action'       : 'CREATE',
-         'cloudlet'     : 'c_3423423423423434',
-         'object_name'  : "test",
-         'object_data'  : {'a':true},
-         'mongrel_resp' : {'value':true, 'other' : 'abc'}
-      }
-
-      dao.evaluateMethod(params, function(out){
-         test.equal(200, out.status)
-         test.equal({ 'Content-Type': 'application/json; charset=utf-8' }, out.headers)
-         test.equal({'value':true, 'other' : 'abc'}, out.body)
-
-
-         params.action = 'DELETE'
-         dao.evaluateMethod(params);
-      });
-
-      test.done();
-   },
-   'test put': function(test) {
-
-      var params = {
-         'action'       : 'PUT',
-         'cloudlet'     : 'c_3423423423423431',
-         'object_name'  : "test",
-         'object_data'  : {'a':true},
-         'mongrel_resp' : {'value':true, 'other' : 'abc'}
-      }
-
-      dao.evaluateMethod(params, function(out){
-         console.log("!!!!!!!!!!!!!!!")
-         console.log(out)
-         console.log(out.status)
-         test.equal(200, out.status)
-         test.equal({ 'Content-Type': 'application/json; charset=utf-8' }, out.headers)
-         test.equal({"value":true,"other":"abc"}, out.body)
-      });
-
-      test.done();
-   },
    'test get': function(test) {
 
-   var params = {
-      'action'       : 'DELETE',
-      'cloudlet'     : 'c_3423423423423431',
-      'object_name'  : "test",
-      'object_data'  : {'a':true},
-      'mongrel_resp' : {'value':true, 'other' : 'abc'}
-   }
-
-   dao.evaluateMethod(params, function(out){
-      console.log("!!!!!!!!!!!!!!!")
-      console.log(out)
-      console.log(out.status)
-      test.equal(200, out.status)
-      test.equal({ 'Content-Type': 'application/json; charset=utf-8' }, out.headers)
-      test.equal({"value":true,"other":"abc"}, out.body)
-   });
-   test.done();
-},
-   'test delete': function(test) {
-
-      var params = {
-         'action'       : 'CREATE',
-         'cloudlet'     : 'c_3423423423423434',
-         'object_name'  : "test",
-         'object_data'  : {'a':true},
-         'mongrel_resp' : {'value':true, 'other' : 'abc'}
+      var msg = {
+         'dao_actions'      : [
+            { 'action' : 'CREATE', 'database': 'aaa' },
+            { 'action' : 'POST',   'database': 'aaa', 'object_name'  : "b", 'object_data'  : {"v":123}},
+            { 'action' : 'GET',    'database': 'aaa', 'object_name'  : "b" },
+            { 'action' : 'PUT',    'database': 'aaa', 'object_name'  : "b", 'object_data'  : {"b":true},
+               'revision' : '1-24f52e652db87f025a69db3efb764e02'},
+            { 'action' : 'FETCH',  'database': 'aaa', 'object_name'  : {} },
+            { 'action' : 'DELETE', 'database': 'aaa' }
+         ],
+         'mongrel_resp' : {'value':true, 'data': {}},
+         'clients'      : [
+            {'uuid' : "ABC", 'connId' : "23423" }
+         ]
       }
 
-      dao.evaluateMethod(params, function(out){
+      var out = dao.evaluateMessage(msg, function( a, resp ){
 
-         var params = {
-            'action'       : 'DELETE',
-            'cloudlet'     : 'c_3423423423423434',
-            'object_name'  : "test",
-            'object_data'  : {'a':true},
-            'mongrel_resp' : {'value':true, 'other' : 'abc'}
-         }
+         console.log('++++++++++++++++');
+         console.log(resp);
+         console.log('++++++++++++++++');
 
-         dao.evaluateMethod(params, function(out){
-            test.equal(200, out.status)
-            test.equal({ 'Content-Type': 'application/json; charset=utf-8' }, out.headers)
-            test.equal({"value":true,"other":"abc"}, out.body)
-         });
-      });
-      test.done();
-   }
+         test.done();
+      })
+
+
+}
 };
