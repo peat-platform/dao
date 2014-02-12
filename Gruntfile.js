@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       },
       plato: {
          options: {
-            title: 'Data Access Object',
+            title: 'Cloudlet API',
             jshint: grunt.file.readJSON('.jshintrc')
          },
          metrics: {
@@ -85,6 +85,7 @@ module.exports = function(grunt) {
 
    });
 
+   // These plugins provide necessary tasks.
    grunt.loadNpmTasks('grunt-contrib-clean');
    grunt.loadNpmTasks('grunt-contrib-jshint');
    grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -102,8 +103,9 @@ module.exports = function(grunt) {
    // Default task(s).
 
    grunt.registerTask('test',     ['nodeunit']);
-   grunt.registerTask('cover',    ['clean:build', 'instrument', 'reloadTasks', 'nodeunit', 'storeCoverage', 'makeReport']);
+   grunt.registerTask('cover',    ['clean:build', 'instrument', 'nodeunit', 'storeCoverage', 'makeReport']);
    grunt.registerTask('default',  ['required',    'jshint',     'nodeunit' ]);
    grunt.registerTask('jenkins',  ['jshint',      'cover',      'coverage',    'plato']);
+
 
 };
