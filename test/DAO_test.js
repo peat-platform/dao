@@ -59,7 +59,15 @@ exports['create'] = {
             { 'action' : 'PUT',    'database': 'aaa', 'object_name'  : "b", 'object_data'  : {"b":true},
                'revision' : '1-24f52e652db87f025a69db3efb764e02'},
             { 'action' : 'FETCH',  'database': 'aaa', 'object_name'  : {} },
-            { 'action' : 'DELETE', 'database': 'aaa' }
+            { 'action' : 'DELETE', 'database': 'aaa' },
+            { 'action' : 'PUT',    'database': 'bbb', 'object_name'  : "b", 'object_data'  : {"b":true},
+               'revision' : '1-24f52e652db87f025a69db3efb764e02'},
+            { 'action' : 'GET',    'database': 'bbb', 'object_name'  : "b" },
+            { 'action' : 'FETCH',  'database': 'bbb', 'object_name'  : {} },
+            { 'action' : 'CREATE', 'database': 'xxx' },
+            { 'action' : 'CREATE', 'database': 'xxx' },
+            { 'action' : 'DELETE', 'database': 'xxx' },
+            { 'action' : 'DELETE', 'database': 'xxx' }
          ],
          'mongrel_resp' : {'value':true, 'data': {}},
          'clients'      : [
@@ -73,6 +81,7 @@ exports['create'] = {
          console.log(resp);
          console.log('++++++++++++++++');
 
+         test.deepEqual({ value: true, data: 'Database Created: aaa' }, resp['0'])
          test.done();
       })
 
