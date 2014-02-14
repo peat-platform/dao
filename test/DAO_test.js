@@ -76,10 +76,10 @@ exports['create'] = {
       }
 
       var out = dao.evaluateMessage(msg, function( a, resp ){
-
-         console.log('++++++++++++++++');
-         console.log(resp);
-         console.log('++++++++++++++++');
+//
+//         console.log('++++++++++++++++');
+//         console.log(resp);
+//         console.log('++++++++++++++++');
 
          test.deepEqual({ value: true, data: 'Database Created: aaa' }, resp['0'])
          test.done();
