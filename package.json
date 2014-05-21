@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@opensourceprojects.eu/git/p/openi/c60b/ad4e/dao.git"
+    "url": "git@github.com:OPENi-ict/dao.git"
   },
   "bugs": {
     "url": ""
@@ -30,9 +30,9 @@
   "dependencies" : {
      "async"         : "",
      "nano"          : "",
-     "m2nodehandler" : "git+https://git@opensourceprojects.eu/git/p/openi/c60b/ad4e/m2nodehandler.git#master",
-     "dbc"           : "git+https://git@opensourceprojects.eu/git/p/openi/c60b/ad4e/dbc.git#master",
-     "openi-logger"  : "git+https://git@opensourceprojects.eu/git/p/openi/c60b/ad4e/openi-logger.git#master"
+     "m2nodehandler" : "git+ssh://git@github.com:OPENi-ict/m2nodehandler.git#master",
+     "dbc"           : "git+ssh://git@github.com:OPENi-ict/dbc.git#master",
+     "openi-logger"  : "git+ssh://git@github.com:OPENi-ict/openi-logger.git#master"
   },
   "devDependencies": {
     "grunt-contrib-jshint"    : "~0.6.4",
