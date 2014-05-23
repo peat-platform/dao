@@ -30,9 +30,9 @@
   "dependencies" : {
      "async"         : "",
      "nano"          : "",
-     "m2nodehandler" : "git+ssh://git@github.com:OPENi-ict/m2nodehandler.git#master",
-     "dbc"           : "git+ssh://git@github.com:OPENi-ict/dbc.git#master",
-     "openi-logger"  : "git+ssh://git@github.com:OPENi-ict/openi-logger.git#master"
+     "m2nodehandler" : "OPENi-ict/m2nodehandler",
+     "dbc"           : "OPENi-ict/dbc.git",
+     "openi-logger"  : "OPENi-ict/openi-logger"
   },
   "devDependencies": {
     "grunt-contrib-jshint"    : "~0.6.4",
