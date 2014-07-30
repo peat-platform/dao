@@ -28,11 +28,18 @@
     "test": "grunt nodeunit"
   },
   "dependencies" : {
-     "async"         : "",
-     "nano"          : "",
-     "m2nodehandler" : "OPENi-ict/m2nodehandler",
-     "dbc"           : "OPENi-ict/dbc",
-     "openi-logger"  : "OPENi-ict/openi-logger"
+    "http-status"   : "",
+    "async"         : "",
+    "nano"          : "",
+    "lazy.js"       : "",
+    "async"         : "",
+    "uuid"          : "",
+    "scrypt"        : "",
+    "jsonminify"    : "",
+    "m2nodehandler" : "OPENi-ict/m2nodehandler",
+    "dbc"           : "OPENi-ict/dbc",
+    "openi-logger"  : "OPENi-ict/openi-logger",
+    "couchbase"     : ""
   },
   "devDependencies": {
     "grunt-contrib-jshint"    : "~0.6.4",
