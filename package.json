@@ -34,7 +34,6 @@
     "lazy.js"       : "",
     "async"         : "",
     "uuid"          : "",
-    "scrypt"        : "",
     "jsonminify"    : "",
     "m2nodehandler" : "OPENi-ict/m2nodehandler",
     "dbc"           : "OPENi-ict/dbc",
