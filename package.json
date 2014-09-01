@@ -38,6 +38,7 @@
     "m2nodehandler" : "OPENi-ict/m2nodehandler",
     "dbc"           : "OPENi-ict/dbc",
     "openi-logger"  : "OPENi-ict/openi-logger",
+    "openi-cloudlet-utils"   : "OPENi-ict/cloudlet-utils",
     "couchbase"     : ""
   },
   "devDependencies": {
