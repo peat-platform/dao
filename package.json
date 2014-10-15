@@ -35,7 +35,7 @@
     "dbc": "OPENi-ict/dbc",
     "openi-logger": "OPENi-ict/openi-logger",
     "openi-cloudlet-utils": "OPENi-ict/cloudlet-utils",
-    "couchbase": "1.2.4"
+    "couchbase": "2.0.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
