@@ -25,17 +25,18 @@
     "test": "grunt nodeunit"
   },
   "dependencies": {
-    "http-status": "",
     "async": "",
-    "nano": "",
-    "lazy.js": "",
-    "uuid": "",
-    "jsonminify": "",
-    "m2nodehandler": "OPENi-ict/m2nodehandler",
+    "bunyan": "^1.1.3",
+    "couchbase": "1.2.4",
     "dbc": "OPENi-ict/dbc",
-    "openi-logger": "OPENi-ict/openi-logger",
+    "http-status": "",
+    "jsonminify": "",
+    "lazy.js": "",
+    "m2nodehandler": "OPENi-ict/m2nodehandler",
+    "nano": "",
     "openi-cloudlet-utils": "OPENi-ict/cloudlet-utils",
-    "couchbase": "2.0.0"
+    "openi-logger": "OPENi-ict/openi-logger",
+    "uuid": ""
   },
   "devDependencies": {
     "grunt": "^0.4.5",
