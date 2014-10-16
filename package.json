@@ -2,7 +2,7 @@
   "name": "DAO",
   "description": "OPENi Cloudlet Platform database access module",
   "version": "0.1.0",
-  "homepage": "",
+  "homepage": "http://www.openi-ict.eu/",
   "author": {
     "name": "dmccarthy",
     "email": "dmccarthy@tssg.org"
@@ -10,9 +10,6 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:OPENi-ict/dao.git"
-  },
-  "bugs": {
-    "url": ""
   },
   "licenses": [
     {
@@ -28,32 +25,22 @@
     "test": "grunt nodeunit"
   },
   "dependencies": {
-    "http-status": "",
     "async": "",
-    "nano": "",
-    "lazy.js": "",
-    "uuid": "",
-    "jsonminify": "",
-    "m2nodehandler": "OPENi-ict/m2nodehandler",
+    "bunyan": "^1.1.3",
+    "couchbase": "1.2.4",
     "dbc": "OPENi-ict/dbc",
-    "openi-logger": "OPENi-ict/openi-logger",
+    "http-status": "",
+    "jsonminify": "",
+    "lazy.js": "",
+    "m2nodehandler": "OPENi-ict/m2nodehandler",
+    "nano": "",
     "openi-cloudlet-utils": "OPENi-ict/cloudlet-utils",
-    "couchbase": "1.2.4"
+    "openi-logger": "OPENi-ict/openi-logger",
+    "uuid": ""
   },
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-config": "",
-    "grunt-contrib-clean": "",
-    "grunt-contrib-concat": "",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-uglify": "",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-istanbul": "",
-    "grunt-istanbul-coverage": "",
-    "grunt-plato": "",
-    "grunt-qunit-cov": "",
-    "sinon": ""
+    "grunt-config": ""
   },
   "keywords": []
 }
