@@ -32,6 +32,7 @@
     "http-status": "",
     "jsonminify": "",
     "lazy.js": "",
+    "loglet": "git://github.com/OPENi-ict/loglet",
     "m2nodehandler": "OPENi-ict/m2nodehandler",
     "nano": "",
     "openi-cloudlet-utils": "OPENi-ict/cloudlet-utils",
