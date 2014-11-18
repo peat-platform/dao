@@ -26,8 +26,6 @@
   },
   "dependencies": {
     "async": "",
-    "bunyan": "^1.1.3",
-    "loglet": "git://github.com/OPENi-ict/loglet",
     "couchbase": "1.2.4",
     "dbc": "OPENi-ict/dbc",
     "http-status": "",
