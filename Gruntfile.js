@@ -8,14 +8,15 @@ module.exports = function(grunt) {
       pkg: grunt.file.readJSON('package.json'),
       jshint: {
          all: [lib],
-         options: grunt.file.readJSON('.jshintrc')
+         options: {
+            reporter: require('jshint-stylish'),
+            jshintrc: '.jshintrc'
+         }
       }
    });
 
-   // These plugins provide necessary tasks.
    grunt.loadNpmTasks('grunt-contrib-jshint');
 
-   // Default task(s).
    grunt.registerTask('default',  ['jshint' ]);
 
 };
