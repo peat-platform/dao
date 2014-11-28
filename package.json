@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "async": "",
-    "couchbase": "1.2.4",
+    "couchbase": "2.0.1",
     "dbc": "OPENi-ict/dbc",
     "http-status": "",
     "jsonminify": "",
@@ -36,7 +36,9 @@
     "nano": "",
     "openi-cloudlet-utils": "OPENi-ict/cloudlet-utils",
     "openi-logger": "OPENi-ict/openi-logger",
-    "uuid": ""
+     "uuid": "",
+     "dropbox": "",
+     "async" : ""
   },
   "devDependencies": {
     "grunt": "^0.4.5",
