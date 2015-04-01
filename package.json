@@ -37,7 +37,8 @@
     "openi-logger": "OPENi-ict/openi-logger",
     "uuid": "",
     "dropbox": "",
-    "deep-equal":""
+    "deep-equal":"",
+    "zmq": "~2.5.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
