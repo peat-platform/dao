@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "async": "",
-    "couchbase": "2.0.1",
+    "couchbase": "2.0.8",
     "dbc": "OPENi-ict/dbc",
     "http-status": "",
     "jsonminify": "",
