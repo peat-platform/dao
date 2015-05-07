@@ -1,6 +1,6 @@
 {
   "name": "dao",
-  "description": "OPENi Cloudlet Platform database access module",
+  "description": "PEAT Cloudlet Platform database access module",
   "version": "0.1.0",
   "homepage": "http://www.openi-ict.eu/",
   "author": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:OPENi-ict/dao.git"
+    "url": "git@github.com:peat-platform/dao.git"
   },
   "licenses": [
     {
@@ -27,14 +27,14 @@
   "dependencies": {
     "async": "",
     "couchbase": "2.0.8",
-    "dbc": "OPENi-ict/dbc",
+    "dbc": "peat-platform/dbc",
     "http-status": "",
     "jsonminify": "",
     "lazy.js": "",
-    "loglet": "git://github.com/OPENi-ict/loglet",
-    "m2nodehandler": "OPENi-ict/m2nodehandler",
-    "openi-cloudlet-utils": "OPENi-ict/cloudlet-utils",
-    "openi-logger": "OPENi-ict/openi-logger",
+    "loglet": "git://github.com/peat-platform/loglet",
+    "m2nodehandler": "peat-platform/m2nodehandler",
+    "openi-cloudlet-utils": "peat-platform/cloudlet-utils",
+    "openi-logger": "peat-platform/openi-logger",
     "uuid": "",
     "dropbox": "",
     "deep-equal":"",
