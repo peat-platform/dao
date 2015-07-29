@@ -35,7 +35,7 @@ exports['init'] = {
    'no args': function(test) {
 
       var params = {
-         'path'      : '/opt/openi/cloudlet_platform/logs/dao',
+         'path'      : '/opt/peat/cloudlet_platform/logs/dao',
          'log_level' : 'debug',
          'as_json'   : true
       }

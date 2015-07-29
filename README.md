@@ -4,7 +4,7 @@ The Cloudlet Platforms dao component persists data and retrieves it from the dat
 demonstrator so it destroys and recreates the database each time it is restarted.
 
 ## Getting Started
-Install the module with: `npm install git+ssh://git@gitlab.openi-ict.eu:dao.git`
+Install the module with: `npm install git+ssh://git@gitlab.peat-platform.org:dao.git`
 
 You will need to install the following through macports or aptitude.
 
@@ -25,7 +25,7 @@ built or if a new dependency is added. There are a number of grunt tasks that ca
 default and jenkins. The jenkins task is executed on the build server, if it doesn't pass then the build will fail.
 
 ```bash
-git clone git@gitlab.openi-ict.eu:dao.git
+git clone git@gitlab.peat-platform.org:dao.git
 cd dao
 npm install
 grunt jenkins
