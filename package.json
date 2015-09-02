@@ -27,17 +27,11 @@
   "dependencies": {
     "async": "",
     "couchbase": "2.0.8",
-    "dbc": "peat-platform/dbc",
     "http-status": "",
-    "jsonminify": "",
     "lazy.js": "",
-    "loglet": "git://github.com/peat-platform/loglet",
     "m2nodehandler": "peat-platform/m2nodehandler",
-    "cloudlet-utils": "peat-platform/cloudlet-utils",
-    "peat-logger": "peat-platform/peat-logger",
+    "cloudlet-utils": "peat-platform/cloudlet-utils#develop",
     "uuid": "",
-    "dropbox": "",
-    "deep-equal":"",
     "zmq": "~2.12.0"
   },
   "devDependencies": {
