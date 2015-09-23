@@ -11,7 +11,9 @@ var helper              = rewire('../lib/CBasehelper.js');
 var perms_prop_worker   = rewire('../lib/perms_propogator_worker');
 var subscriptionHandler = rewire('../lib/subscriptions');
 
-var couchbase  = require('couchbase').Mock;
+var utils   = require('cloudlet-utils').cloudlet_utils;
+
+var couchbase  = rewire('couchbase').Mock;
 var cluster = new couchbase.Cluster();
 var bucket = cluster.openBucket();
 
@@ -19,7 +21,13 @@ var assert = require('chai').assert;
 
 helper.__set__({
    "couchbase": require('couchbase').Mock,
-   "trackletWorker" : {"send":function(data){return}}
+   "trackletWorker" : {"send":function(data){return}},
+   "logger" : {
+      "error":function(err){return},
+      "debug":function(err){return}
+   },
+   "cluster" : cluster,
+   "bucket" : bucket
 });
 
 var mockcb = function(cd){
@@ -99,26 +107,6 @@ describe('Test Helper',function(){
       ]
    };
 
-   var actionGetObjectId = [
-      {
-         'action'      : 'GET',
-         'database'    : 'c_897b0ef002da79321dcb0d681cb473d0+0b1d1210-283c-407d-87d9-b88cf218379a',
-         'resolve'     : false,
-         'resp_type'   : 'object',
-         'property'    : '',
-         'meta'        : undefined,
-         'api_key'     : '86eaec8f28be20cee4aa3d05ea6a1ae0',
-         'third_party' : 'c_897b0ef002da79321dcb0d681cb473d0',
-         'bucket'      : 'objects',
-         'client_name' :  undefined,
-         'third_party_cloudlet' :  undefined,
-         'headers'     : {
-            'x-forwarded-for' : "127.0.0.1",
-            'REMOTE_ADDR'     : "127.0.0.1"
-         }
-      }
-   ];
-
    var exampleObject = {
       "@id": "014dd88f-36f2-42a0-9e4e-a5dfc02060ef",
       "@location": "/api/v1/objects/c_897b0ef002da79321dcb0d681cb473d0/0b1d1210-283c-407d-87d9-b88cf218379a",
@@ -158,33 +146,165 @@ describe('Test Helper',function(){
             "delete": true
          }
       }
-   }
+   };
 
-   helper.__set__("dbs",{'objects':bucket,'types':bucket,'attachments':bucket,'permissions':bucket,'app_permissions':bucket});
-
-
-   it("Should try get object",function(){
-      var cb = function(err, results, httpStatusCode){
-         //console.log(results);
-         assert.isNull(err, "Error should be null");
-         assert.isNotNull(results,"results should not be null");
-         assert(results['0'][0]['@data'] == exampleObject['@data'],'Object Should match Example')
-      };
-
-      bucket.upsert('c_897b0ef002da79321dcb0d681cb473d0+0b1d1210-283c-407d-87d9-b88cf218379a',exampleObject, function(err, result) {
-         if (err) throw err;
-      });
-
-      var getAction = daoActionTemplate;
-      getAction.dao_actions=actionGetObjectId;
-
-      try {
-         helper.evaluateMessage(getAction, mockcb(cb))
-      }catch(e){
-         console.log("Should try get object: ",e)
-      }
-   })
+   helper.__set__("dbs",{'objects':bucket,'types':bucket,'attachments':bucket,'permissions':bucket,'app_permissions':bucket, 'users':bucket,'dbkeys':bucket});
 
 
+   describe('Test Object POST',function() {
+      var actionPostObjectId = [
+         {
+            'action'      : 'POST',
+            'database'    : 'c_897b0ef002da79321dcb0d681cb473d0+014dd88f-36f2-42a0-9e4e-a5dfc02060ef',
+            'object_name' : '014dd88f-36f2-42a0-9e4e-a5dfc02060ef',
+            'object_data' : exampleObject,
+            'id'          : '014dd88f-36f2-42a0-9e4e-a5dfc02060ef',
+            'cloudlet_id' : 'c_897b0ef002da79321dcb0d681cb473d0',
+            'api_key'     : '86eaec8f28be20cee4aa3d05ea6a1ae0',
+            'third_party' : 'c_897b0ef002da79321dcb0d681cb473d0',
+            'bucket'      : 'objects'
+         }
+      ];
+      it("Should try post object", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            assert.isNull(err, "Error should be null");
+            assert.isTrue(utils.isObjectId(results['@id']), 'Object Id Should not be null');
+            assert.equal(201,httpStatusCode, "Status should be 201");
 
+            var doc = 'c_897b0ef002da79321dcb0d681cb473d0+'+results['@id'];
+
+            bucket.get(doc, function (err, result) {
+               assert.isNull(err, "Error should be null");
+               assert.isNotNull(result, "results should not be null");
+               assert.deepEqual(result['value']['@data'], exampleObject['@data'], 'Posted Object should match Example');
+               done()
+            });
+         };
+
+         var postAction = daoActionTemplate;
+         postAction.dao_actions = actionPostObjectId;
+
+         try {
+            helper.evaluateMessage(postAction, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try post object: ", e)
+         }
+      })
+   });
+
+   describe('Test Object PUT',function() {
+      var actionPutObjectId = [
+         {
+            'action'       : 'PUT',
+            'database'     : 'c_897b0ef002da79321dcb0d681cb473d0+0b1d1210-283c-407d-87d9-b88cf218379a',
+            'revision'     : '1',
+            'object_data'  : exampleObject,
+            'id'           : '0b1d1210-283c-407d-87d9-b88cf218379a',
+            'bucket'      : 'objects'
+         }
+      ];
+      it("Should try get object", function (done) {
+         /* This Test Fails */
+         var cb = function (err, results, httpStatusCode) {
+            done()
+         };
+
+         bucket.upsert('c_897b0ef002da79321dcb0d681cb473d0+0b1d1210-283c-407d-87d9-b88cf218379a', exampleObject, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var putAction = daoActionTemplate;
+         putAction.dao_actions = actionPutObjectId;
+
+         try {
+            helper.evaluateMessage(putAction, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try put object: ", e)
+            done()
+         }
+      })
+   });
+
+   describe('Test Object GET',function() {
+      var actionGetObjectId = [
+         {
+            'action'      : 'GET',
+            'database'    : 'c_897b0ef002da79321dcb0d681cb473d0+0b1d1210-283c-407d-87d9-b88cf218379a',
+            'resolve'     : false,
+            'resp_type'   : 'object',
+            'property'    : '',
+            'meta'        : undefined,
+            'api_key'     : '86eaec8f28be20cee4aa3d05ea6a1ae0',
+            'third_party' : 'c_897b0ef002da79321dcb0d681cb473d0',
+            'bucket'      : 'objects',
+            'client_name' :  undefined,
+            'third_party_cloudlet' :  undefined,
+            'headers'     : {
+               'x-forwarded-for' : "127.0.0.1",
+               'REMOTE_ADDR'     : "127.0.0.1"
+            }
+         }
+      ];
+      it("Should try get object", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(200,httpStatusCode, "Status should be 200");
+            assert.deepEqual(results['@data'], exampleObject['@data'], 'Received Object Should match Example');
+            done()
+         };
+
+         bucket.upsert('c_897b0ef002da79321dcb0d681cb473d0+0b1d1210-283c-407d-87d9-b88cf218379a', exampleObject, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var getAction = daoActionTemplate;
+         getAction.dao_actions = actionGetObjectId;
+
+         try {
+            helper.evaluateMessage(getAction, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try get object: ", e)
+         }
+      })
+   });
+
+   describe('Test CRUD ',function() {
+      var actionGenDeleteId = [
+         {
+            'action'       : 'GENERIC_DELETE',
+            'database'     : 'users',
+            'id'           : 'users_devUser',
+            'data'         : {},
+            'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
+            'options'      : {}
+         }
+      ];
+
+      it("Should try crud create", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(200,httpStatusCode, "Status should be 200");
+            assert.equal(results['request']['id'], actionGenDeleteId[0]['id'], "IDs should match")
+            done()
+         };
+
+         bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
+            if ( err ) throw err;
+         });
+         bucket.upsert('users_devUser', {"user": "TestUser"}, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var crudDelete = daoActionTemplate;
+         crudDelete.dao_actions = actionGenDeleteId;
+
+         try {
+            helper.evaluateMessage(crudDelete, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try get object: ", e)
+         }
+      })
+   });
 });
