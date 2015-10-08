@@ -30,7 +30,7 @@
     "http-status": "",
     "lazy.js": "",
     "m2nodehandler": "peat-platform/m2nodehandler",
-    "cloudlet-utils": "peat-platform/cloudlet-utils#develop",
+    "cloudlet-utils": "peat-platform/cloudlet-utils",
     "uuid": "",
     "zmq": "2.13.0"
   },
