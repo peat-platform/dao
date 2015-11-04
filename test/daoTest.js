@@ -25,7 +25,8 @@ helper.__set__({
    "trackletWorker" : {"send":function(data){return}},
    "logger" : {
       "error":function(err){return},
-      "debug":function(err){return}
+      "debug":function(err){return},
+      "info":function(err){return}
    },
    "cluster" : cluster,
    "bucket" : bucket
@@ -149,7 +150,16 @@ describe('Test Helper',function(){
       }
    };
 
-   helper.__set__("dbs",{'objects':bucket,'types':bucket,'attachments':bucket,'permissions':bucket,'app_permissions':bucket, 'users':bucket,'dbkeys':bucket});
+   helper.__set__("dbs",{
+      'objects'         :bucket,
+      'types'           :bucket,
+      'attachments'     :bucket,
+      'permissions'     :bucket,
+      'app_permissions' :bucket,
+      'users'           :bucket,
+      'dbkeys'          :bucket,
+      'clients'         :bucket
+   });
 
 
    describe('Test Object POST',function() {
@@ -340,7 +350,6 @@ describe('Test Helper',function(){
       ];
       it("Should try get object", function (done) {
          var cb = function (err, results, httpStatusCode) {
-            console.log(results);
             assert.isNull(err, "Error should be null");
             assert.isNotNull(results, "results should not be null");
             assert.equal(1,results['result'].length, "Length should be 1");
@@ -381,168 +390,352 @@ describe('Test Helper',function(){
       })
    });
 
-   //describe('Test CRUD GENERIC_DELETE',function() {
-   //   var actionGenDeleteId = [
+   describe('Test CRUD GENERIC_DELETE',function() {
+      var actionGenDeleteId = [
+         {
+            'action'       : 'GENERIC_DELETE',
+            'database'     : 'users',
+            'id'           : 'users_devUser',
+            'data'         : {},
+            'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
+            'options'      : {}
+         }
+      ];
+
+      it("Should try crud delete", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(200,httpStatusCode, "Status should be 200");
+            assert.equal(results['request']['id'], actionGenDeleteId[0]['id'], "IDs should match")
+            done()
+         };
+
+         bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
+            if ( err ) throw err;
+         });
+         bucket.upsert('users_devUser', {"user": "TestUser"}, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var crudDelete = daoActionTemplate;
+         crudDelete.dao_actions = actionGenDeleteId;
+
+         try {
+            helper.evaluateMessage(crudDelete, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try get object: ", e)
+         }
+      })
+   });
+
+   describe('Test CRUD GENERIC_CREATE',function() {
+      var actionGenCreateId = [
+         {
+            'action'       : 'GENERIC_CREATE',
+            'database'     : 'users',
+            'id'           : 'users_devUser',
+            'data'         : { username: 'users_devUser',
+               password: 'users_devUser',
+               scope: 'user',
+               cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0' },
+            'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
+            'options'      : {}
+         }
+      ];
+
+      it("Should try crud create", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            //console.log(err, results, httpStatusCode);
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(201,httpStatusCode, "Status should be 201");
+            assert.equal(results['request']['id'], actionGenCreateId[0]['id'], "IDs should match");
+            assert.equal(results['request']['data']['username'], results['response']['username'], "Usernames Shout Match");
+            done()
+         };
+
+         bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var crudCreate = daoActionTemplate;
+         crudCreate.dao_actions = actionGenCreateId;
+
+         try {
+            helper.evaluateMessage(crudCreate, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try get object: ", e)
+         }
+      })
+   });
+
+   describe('Test CRUD GENERIC_READ',function() {
+      var actionGenReadId = [
+         {
+            'action'       : 'GENERIC_READ',
+            'database'     : 'users',
+            'id'           : 'users_devUser2',
+            'data'         : {},
+            'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
+            'options'      : {}
+         }
+      ];
+
+      var user = {username: 'users_devUser',password: 'users_devUser',scope: 'user', cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0'}
+
+      it("Should try crud read", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            //console.log(err, results, httpStatusCode);
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(200,httpStatusCode, "Status should be 201");
+            assert.equal(results['response']['username'], user['username'], "IDs should match")
+            done()
+         };
+
+         bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
+            if ( err ) throw err;
+         });
+         bucket.upsert('users_devUser2', user, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var crudRead = daoActionTemplate;
+         crudRead.dao_actions = actionGenReadId;
+
+         try {
+            helper.evaluateMessage(crudRead, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try get object: ", e)
+         }
+      })
+   });
+
+   describe('Test CRUD GENERIC_UPDATE',function() {
+
+      var user = {username: 'users_devUser',password: 'users_devUser',scope: 'user', cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0'}
+
+
+      var actionGenUpdateId = [
+         {
+            'action'       : 'GENERIC_UPDATE',
+            'database'     : 'users',
+            'id'           : 'users_devUser2',
+            'data'         : user,
+            'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
+            'options'      : {}
+         }
+      ];
+
+
+      it("Should try crud update", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(200,httpStatusCode, "Status should be 201");
+            assert.equal(results['response']['username'], user['username'], "IDs should match")
+            done()
+         };
+
+         bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
+            if ( err ) throw err;
+         });
+         bucket.upsert('users_devUser2', user, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var crudUpdate = daoActionTemplate;
+         crudUpdate.dao_actions = actionGenUpdateId;
+
+         try {
+            helper.evaluateMessage(crudUpdate, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try get object: ", e)
+         }
+      })
+   });
+
+   describe('Test CRUD GENERIC_VIEW',function() {
+      var actionGenViewId = [
+         {
+            'action'     : 'GENERIC_VIEW',
+            'start_key'  : 'c_897b0ef002da79321dcb0d681cb473d0',
+            'end_key'    : 'c_897b0ef002da79321dcb0d681cb473d0' + '\uefff',
+            'design_doc' : 'clients_views',
+            'view_name'  : "clients_by_cloudlet_id",
+            'meta'       : {
+               "limit"       : 30,
+               "offset"      : 0,
+               "total_count" : 0,
+               "prev"        : null,
+               "next"        : 30
+            },
+            'resp_type'  : 'clients',
+            'cloudlet'   : 'c_897b0ef002da79321dcb0d681cb473d0',
+            'bucket'     : 'clients',
+            'data'       : {}
+         }
+      ];
+
+      var client = {
+         "name": "mochaTest",
+         "description": "MochaTest",
+         "isSE": false,
+         "cloudlet": "c_897b0ef002da79321dcb0d681cb473d0",
+         "api_key": "3c78fe66d77c5cbe2bdef13efe10e3c3",
+         "secret": "cc2db5e5b3ad33587f89430c05d5ff94dc68952ac68750d11b7898b968630acf"
+      };
+      var clients_views = {
+         "views": {
+            "clients_by_cloudlet_id": { "map"   : "function (doc, meta) {\n  if (undefined !== doc.isTest && true === doc.isTest ){ return }\n emit(doc.cloudlet, doc); \n}", "reduce": "_count" },
+            "list_service_enablers" : { "map"   : "function (doc, meta) {\n if (undefined !== doc.isTest && true === doc.isTest ){ return }\n if (undefined !== doc.isSE && true === doc.isSE ){\n emit(meta.id, doc);\n }\n}", "reduce": "_count" }
+         }
+      };
+      var user = {username: 'users_devUser',password: 'users_devUser',scope: 'user', cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0'}
+
+
+      it("Should try crud GENERIC_VIEW", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(200,httpStatusCode, "Status should be 201");
+            //assert.equal(results['response']['username'], user['username'], "IDs should match")
+            done()
+         };
+
+         bucket.upsert('clients_3c78fe66d77c5cbe2bdef13efe10e3c3', client, function (err, result) {
+            if ( err ) throw err;
+         });
+         bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         bucketMngr.upsertDesignDocument("clients_views",clients_views,function (err, result) {
+            assert.isNull(err, "Error should be null");
+            if ( err ) throw err;
+            bucket._indexView("clients_views","clients_by_cloudlet_id",null,function(err){
+               assert.isNull(err, "Error should be null");
+               if ( err ) throw err;
+
+               var crudUpdate = daoActionTemplate;
+               crudUpdate.dao_actions = actionGenViewId;
+
+               try {
+                  helper.evaluateMessage(crudUpdate, mockcb(cb))
+               } catch ( e ) {
+                  console.log("Should try get object: ", e)
+               }
+            })
+         });
+      })
+   });
+
+   describe('Test CRUD PATCH_ATTACHMENT_OBJECT',function() {
+      var obj = {"@data":{'t_670a968a4a7bbe6fbbd434d23ed756c0-1667':'obj'}};
+
+      var actionPatchAttach = [
+         {
+            'action'       : 'PATCH_ATTACHMENT_OBJECT',
+            'database'     : 'c_897b0ef002da79321dcb0d681cb473d0+0c7d1319-684c-876d-20d5-f99df576376c',
+            'type'         : 't_670a968a4a7bbe6fbbd434d23ed756c0-1667',
+            'object'       : obj,
+            'bucket'       : 'objects'
+         }
+      ];
+
+      var clients_views = {
+         "views": {
+            "clients_by_cloudlet_id": { "map"   : "function (doc, meta) {\n  if (undefined !== doc.isTest && true === doc.isTest ){ return }\n emit(doc.cloudlet, doc); \n}", "reduce": "_count" },
+            "list_service_enablers" : { "map"   : "function (doc, meta) {\n if (undefined !== doc.isTest && true === doc.isTest ){ return }\n if (undefined !== doc.isSE && true === doc.isSE ){\n emit(meta.id, doc);\n }\n}", "reduce": "_count" }
+         }
+      };
+      var user = {username: 'users_devUser',password: 'users_devUser',scope: 'user', cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0'}
+
+
+      it("Should try crud PATCH_ATTACHMENT_OBJECT", function (done) {
+         var cb = function (err, results, httpStatusCode) {
+            console.log(err, results, httpStatusCode);
+            assert.isNull(err, "Error should be null");
+            assert.isNotNull(results, "results should not be null");
+            assert.equal(200,httpStatusCode, "Status should be 200");
+            //assert.equal(results['response']['username'], user['username'], "IDs should match")
+            done()
+         };
+
+         var data = {'t_670a968a4a7bbe6fbbd434d23ed756c0-1667':'obj'};
+         exampleObject['@data'] = data
+
+         bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         bucket.upsert('c_897b0ef002da79321dcb0d681cb473d0+0c7d1319-684c-876d-20d5-f99df576376c', exampleObject, function (err, result) {
+            if ( err ) throw err;
+         });
+
+         var actionPatch = daoActionTemplate;
+         actionPatch.dao_actions = actionPatchAttach;
+
+         try {
+            helper.evaluateMessage(actionPatch, mockcb(cb))
+         } catch ( e ) {
+            console.log("Should try PATCH_ATTACHMENT_OBJECT: ", e)
+         }
+      })
+   });
+
+   //describe('Test CRUD PATCH_ATTACHMENT',function() {
+   //   var obj = {"@data":['a','b','c','d','e','f','g','h','i','j','k']};
+   //
+   //   var actionPatchAttach = [
    //      {
-   //         'action'       : 'GENERIC_DELETE',
-   //         'database'     : 'users',
-   //         'id'           : 'users_devUser',
-   //         'data'         : {},
-   //         'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
-   //         'options'      : {}
+   //         'action'       : 'PATCH_ATTACHMENT',
+   //         'database'     : 'c_897b0ef002da79321dcb0d681cb473d0+0c7d1319-684c-876d-20d5-f99df576376c',
+   //         'type'         : 't_670a968a4a7bbe6fbbd434d23ed756c0-1667',
+   //         'object'       : obj,
+   //         'bucket'       : 'objects',
+   //         'property'     : '1.2.3.4.5.6.7.8.9.0'
    //      }
    //   ];
    //
-   //   it("Should try crud create", function (done) {
+   //   var clients_views = {
+   //      "views": {
+   //         "clients_by_cloudlet_id": { "map"   : "function (doc, meta) {\n  if (undefined !== doc.isTest && true === doc.isTest ){ return }\n emit(doc.cloudlet, doc); \n}", "reduce": "_count" },
+   //         "list_service_enablers" : { "map"   : "function (doc, meta) {\n if (undefined !== doc.isTest && true === doc.isTest ){ return }\n if (undefined !== doc.isSE && true === doc.isSE ){\n emit(meta.id, doc);\n }\n}", "reduce": "_count" }
+   //      }
+   //   };
+   //   var user = {username: 'users_devUser',password: 'users_devUser',scope: 'user', cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0'}
+   //
+   //
+   //   it("Should try crud PATCH_ATTACHMENT", function (done) {
    //      var cb = function (err, results, httpStatusCode) {
+   //         console.log(err, results, httpStatusCode);
    //         assert.isNull(err, "Error should be null");
    //         assert.isNotNull(results, "results should not be null");
    //         assert.equal(200,httpStatusCode, "Status should be 200");
-   //         assert.equal(results['request']['id'], actionGenDeleteId[0]['id'], "IDs should match")
+   //         //assert.equal(results['response']['username'], user['username'], "IDs should match")
    //         done()
    //      };
    //
-   //      bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
-   //         if ( err ) throw err;
-   //      });
-   //      bucket.upsert('users_devUser', {"user": "TestUser"}, function (err, result) {
-   //         if ( err ) throw err;
-   //      });
-   //
-   //      var crudDelete = daoActionTemplate;
-   //      crudDelete.dao_actions = actionGenDeleteId;
-   //
-   //      try {
-   //         helper.evaluateMessage(crudDelete, mockcb(cb))
-   //      } catch ( e ) {
-   //         console.log("Should try get object: ", e)
-   //      }
-   //   })
-   //});
-   //
-   //describe('Test CRUD GENERIC_CREATE',function() {
-   //   var actionGenCreateId = [
-   //      {
-   //         'action'       : 'GENERIC_CREATE',
-   //         'database'     : 'users',
-   //         'id'           : 'users_devUser',
-   //         'data'         : { username: 'users_devUser',
-   //            password: 'users_devUser',
-   //            scope: 'user',
-   //            cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0' },
-   //         'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
-   //         'options'      : {}
-   //      }
-   //   ];
-   //
-   //   it("Should try crud create", function (done) {
-   //      var cb = function (err, results, httpStatusCode) {
-   //         //console.log(err, results, httpStatusCode);
-   //         assert.isNull(err, "Error should be null");
-   //         assert.isNotNull(results, "results should not be null");
-   //         assert.equal(201,httpStatusCode, "Status should be 201");
-   //         assert.equal(results['request']['id'], actionGenCreateId[0]['id'], "IDs should match");
-   //         assert.equal(results['request']['data']['username'], results['response']['username'], "Usernames Shout Match");
-   //         done()
-   //      };
+   //      var data = ['a','b','c','d','e','f','g','h','i','j','k'];
+   //      exampleObject['@data'] = data;
    //
    //      bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
    //         if ( err ) throw err;
    //      });
    //
-   //      var crudCreate = daoActionTemplate;
-   //      crudCreate.dao_actions = actionGenCreateId;
+   //      bucket.upsert('c_897b0ef002da79321dcb0d681cb473d0+0c7d1319-684c-876d-20d5-f99df576376c', exampleObject, function (err, result) {
+   //         if ( err ) throw err;
+   //      });
+   //
+   //      var actionPatch = daoActionTemplate;
+   //      actionPatch.dao_actions = actionPatchAttach;
    //
    //      try {
-   //         helper.evaluateMessage(crudCreate, mockcb(cb))
+   //         helper.evaluateMessage(actionPatch, mockcb(cb))
    //      } catch ( e ) {
-   //         console.log("Should try get object: ", e)
-   //      }
-   //   })
-   //});
-   //
-   //describe('Test CRUD GENERIC_READ',function() {
-   //   var actionGenReadId = [
-   //      {
-   //         'action'       : 'GENERIC_READ',
-   //         'database'     : 'users',
-   //         'id'           : 'users_devUser2',
-   //         'data'         : {},
-   //         'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
-   //         'options'      : {}
-   //      }
-   //   ];
-   //
-   //   var user = {username: 'users_devUser',password: 'users_devUser',scope: 'user', cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0'}
-   //
-   //   it("Should try crud read", function (done) {
-   //      var cb = function (err, results, httpStatusCode) {
-   //         //console.log(err, results, httpStatusCode);
-   //         assert.isNull(err, "Error should be null");
-   //         assert.isNotNull(results, "results should not be null");
-   //         assert.equal(200,httpStatusCode, "Status should be 201");
-   //         assert.equal(results['response']['username'], user['username'], "IDs should match")
-   //         done()
-   //      };
-   //
-   //      bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
-   //         if ( err ) throw err;
-   //      });
-   //      bucket.upsert('users_devUser2', user, function (err, result) {
-   //         if ( err ) throw err;
-   //      });
-   //
-   //      var crudRead = daoActionTemplate;
-   //      crudRead.dao_actions = actionGenReadId;
-   //
-   //      try {
-   //         helper.evaluateMessage(crudRead, mockcb(cb))
-   //      } catch ( e ) {
-   //         console.log("Should try get object: ", e)
-   //      }
-   //   })
-   //});
-   //
-   //describe('Test CRUD GENERIC_UPDATE',function() {
-   //
-   //   var user = {username: 'users_devUser',password: 'users_devUser',scope: 'user', cloudlet: 'c_1bb237a4556baf0dd99d7d4a2f9f2df0'}
-   //
-   //
-   //   var actionGenUpdateId = [
-   //      {
-   //         'action'       : 'GENERIC_UPDATE',
-   //         'database'     : 'users',
-   //         'id'           : 'users_devUser2',
-   //         'data'         : user,
-   //         'authorization': 'dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7',
-   //         'options'      : {}
-   //      }
-   //   ];
-   //
-   //
-   //   it("Should try crud update", function (done) {
-   //      var cb = function (err, results, httpStatusCode) {
-   //         assert.isNull(err, "Error should be null");
-   //         assert.isNotNull(results, "results should not be null");
-   //         assert.equal(200,httpStatusCode, "Status should be 201");
-   //         assert.equal(results['response']['username'], user['username'], "IDs should match")
-   //         done()
-   //      };
-   //
-   //      bucket.upsert('dbkeys_29f81fe0-3097-4e39-975f-50c4bf8698c7', {"dbs": ["users","clients","authorizations","queries"]}, function (err, result) {
-   //         if ( err ) throw err;
-   //      });
-   //      bucket.upsert('users_devUser2', user, function (err, result) {
-   //         if ( err ) throw err;
-   //      });
-   //
-   //      var crudUpdate = daoActionTemplate;
-   //      crudUpdate.dao_actions = actionGenUpdateId;
-   //
-   //      try {
-   //         helper.evaluateMessage(crudUpdate, mockcb(cb))
-   //      } catch ( e ) {
-   //         console.log("Should try get object: ", e)
+   //         console.log("Should try PATCH_ATTACHMENT_OBJECT: ", e)
    //      }
    //   })
    //});
