@@ -29,15 +29,17 @@
     "couchbase": "2.0.8",
     "http-status": "",
     "lazy.js": "",
-    "m2nodehandler": "peat-platform/m2nodehandler",
-    "cloudlet-utils": "peat-platform/cloudlet-utils#develop",
+    "m2nodehandler": "git://github.com/peat-platform/m2nodehandler#develop",
+    "cloudlet-utils": "git://github.com/peat-platform/cloudlet-utils#develop",
     "uuid": "",
     "zmq": "~2.13.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
-    "jshint-stylish": "^1.0.0"
+    "jshint-stylish": "^1.0.0",
+    "rewire" : "2.3.4",
+    "chai" : "3.1.0"
   },
   "keywords": []
 }
